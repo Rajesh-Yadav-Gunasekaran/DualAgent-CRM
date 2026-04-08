@@ -68,7 +68,7 @@ export default class LeadActionCoach extends LightningElement {
         }
     }
 
-    async handleGenerate() {
+    /*async handleGenerate() {
         this.isBusy = true;
         this.error = null;
 
@@ -118,7 +118,7 @@ export default class LeadActionCoach extends LightningElement {
             refreshApex(this.wiredLeadResult),
             refreshApex(this.wiredDraftsResult)
         ]);
-    }
+    }*/
 
     get recommendationToShow() {
         if (this.recommendation) {
