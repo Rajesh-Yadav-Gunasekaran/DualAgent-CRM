@@ -1,7 +1,27 @@
 <template>
     <lightning-card title="Lead Action Coach">
         <div class="slds-p-around_medium">
-            
+            <!--<lightning-button
+                label="Re-Generate Recommendation"
+                variant="brand"
+                onclick={handleGenerate}
+                disabled={isBusy}>
+            </lightning-button>
+
+            <lightning-button
+                class="slds-m-left_small"
+                label="Apply to Lead"
+                onclick={handleApply}
+                disabled={isApplyDisabled}>
+            </lightning-button>
+
+            <lightning-button
+                class="slds-m-left_small"
+                label="Clear"
+                onclick={handleClear}
+                disabled={isClearDisabled}>
+            </lightning-button>-->
+
             <template if:true={error}>
                 <div class="slds-text-color_error slds-m-top_small">
                     {error}
