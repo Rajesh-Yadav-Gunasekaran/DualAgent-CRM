@@ -1,0 +1,163 @@
+<template>
+    <lightning-card title="Lead Action Coach">
+        <div class="slds-p-around_medium">
+            <lightning-button
+                label="Re-Generate Recommendation"
+                variant="brand"
+                onclick={handleGenerate}
+                disabled={isBusy}>
+            </lightning-button>
+
+            <lightning-button
+                class="slds-m-left_small"
+                label="Apply to Lead"
+                onclick={handleApply}
+                disabled={isApplyDisabled}>
+            </lightning-button>
+
+            <lightning-button
+                class="slds-m-left_small"
+                label="Clear"
+                onclick={handleClear}
+                disabled={isClearDisabled}>
+            </lightning-button>
+
+            <template if:true={error}>
+                <div class="slds-text-color_error slds-m-top_small">
+                    {error}
+                </div>
+            </template>
+
+            <template if:true={recommendationToShow}>
+                <div class="slds-m-top_medium">
+                    <p><strong>Bucket:</strong> {recommendationToShow.priorityBucket}</p>
+                    <p><strong>Next Action:</strong> {recommendationToShow.nextAction}</p>
+
+                    <div class="slds-m-top_small">
+                        <strong>Talking Points</strong>
+                        <ul class="slds-list_dotted slds-m-left_medium">
+                            <template for:each={recommendationToShow.talkingPoints} for:item="tp">
+                                <li key={tp}>{tp}</li>
+                            </template>
+                        </ul>
+                    </div>
+
+                    <div class="slds-m-top_small">
+                        <strong>Reasons</strong>
+                        <ul class="slds-list_dotted slds-m-left_medium">
+                            <template for:each={recommendationToShow.reasonSummary} for:item="r">
+                                <li key={r}>{r}</li>
+                            </template>
+                        </ul>
+                    </div>
+
+                    <template if:true={savedRecommendationTimestamp}>
+                        <div class="slds-m-top_small slds-text-color_weak">
+                            <strong>Last Generated:</strong> {savedRecommendationTimestamp}
+                        </div>
+                    </template>
+                </div>
+            </template>
+
+            <div class="slds-m-top_large">
+                <h3 class="slds-text-heading_small"><strong>AWS Outreach Sequence</strong></h3>
+
+                <div class="slds-m-top_small">
+                    <p><strong>Status:</strong> {awsSequenceStatus}</p>
+
+                    <template if:true={awsSequenceGeneratedOn}>
+                        <p><strong>Generated On:</strong> {awsSequenceGeneratedOn}</p>
+                    </template>
+
+                    <template if:true={awsSequenceError}>
+                        <div class="slds-text-color_error slds-m-top_x-small">
+                            <strong>Error:</strong> {awsSequenceError}
+                        </div>
+                    </template>
+                </div>
+
+                <template if:true={hasDrafts}>
+                    <template for:each={drafts} for:item="draft">
+                        <div key={draft.Id} class="slds-box slds-m-top_medium">
+                            <p><strong>Touch:</strong> {draft.Touch_Number__c}</p>
+                            <p><strong>Channel:</strong> {draft.Channel__c}</p>
+                            <p><strong>Send Offset (Days):</strong> {draft.Send_Offset_Days__c}</p>
+
+                            <template if:true={draft.isEmail}>
+                                <div class="slds-m-top_small">
+                                    <strong>Subject Options</strong>
+                                    <ul class="slds-list_dotted slds-m-left_medium">
+                                        <template for:each={draft.subjectOptionsList} for:item="subject">
+                                            <li key={subject}>{subject}</li>
+                                        </template>
+                                    </ul>
+                                </div>
+
+                                <div class="slds-m-top_small">
+                                    <strong>Professional</strong>
+                                    <div class="slds-box slds-theme_default slds-m-top_x-small prewrap">
+                                        {draft.Body_Professional__c}
+                                    </div>
+                                </div>
+
+                                <div class="slds-m-top_small">
+                                    <strong>Executive</strong>
+                                    <div class="slds-box slds-theme_default slds-m-top_x-small prewrap">
+                                        {draft.Body_Executive__c}
+                                    </div>
+                                </div>
+
+                                <div class="slds-m-top_small">
+                                    <strong>Friendly</strong>
+                                    <div class="slds-box slds-theme_default slds-m-top_x-small prewrap">
+                                        {draft.Body_Friendly__c}
+                                    </div>
+                                </div>
+                            </template>
+
+                            <template if:true={draft.isCall}>
+                                <div class="slds-m-top_small">
+                                    <strong>Call Opener</strong>
+                                    <div class="slds-box slds-theme_default slds-m-top_x-small prewrap">
+                                        {draft.Call_Opener__c}
+                                    </div>
+                                </div>
+
+                                <div class="slds-m-top_small">
+                                    <strong>Voicemail</strong>
+                                    <div class="slds-box slds-theme_default slds-m-top_x-small prewrap">
+                                        {draft.Voicemail__c}
+                                    </div>
+                                </div>
+
+                                <template if:true={draft.Fallback_Email_Subject__c}>
+                                    <div class="slds-m-top_small">
+                                        <strong>Fallback Email Subject</strong>
+                                        <div class="slds-box slds-theme_default slds-m-top_x-small prewrap">
+                                            {draft.Fallback_Email_Subject__c}
+                                        </div>
+                                    </div>
+                                </template>
+
+                                <template if:true={draft.Fallback_Email_Body__c}>
+                                    <div class="slds-m-top_small">
+                                        <strong>Fallback Email Body</strong>
+                                        <div class="slds-box slds-theme_default slds-m-top_x-small prewrap">
+                                            {draft.Fallback_Email_Body__c}
+                                        </div>
+                                    </div>
+                                </template>
+                            </template>
+                        </div>
+                    </template>
+                </template>
+
+                <template if:false={hasDrafts}>
+                    <div class="slds-m-top_small slds-text-color_weak">
+                        No outreach sequence available yet.
+                    </div>
+                </template>
+            </div>
+        </div>
+    </lightning-card>
+</template>
