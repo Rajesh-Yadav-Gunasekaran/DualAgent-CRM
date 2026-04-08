@@ -35,6 +35,9 @@ Instead of using AI as a single black box, the system separates decision-making 
 7. AWS Execution:
    - Apex callout → API Gateway → Lambda → Bedrock
    - Generates 3-touch outreach sequence
+   - Lead_Outreach_Draft__c stores the 3-touch sequence
+   - each record represents one touch
+   - displayed on Lead via LWC
 
 8. Data stored in:
    - Lead fields (decision)
@@ -106,9 +109,7 @@ docs/ → Architecture, flow diagrams, prompts
 
 ## Future Enhancements
 
-- Dynamic sequencing based on engagement
-- Feedback loop into Agentforce decisions
-- Multi-rep workload balancing
+- Re-Generate Recommendation on Lead Record which gives more power to Rep to get new recommendation during the day based on his current workload and factors like lead dtatus, age, and current SLA.
 
 ---
 
